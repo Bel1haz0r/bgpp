@@ -1,3 +1,4 @@
+const fs = require('node:fs');
 const fastify = require("fastify")({
   logger: true,
 });
@@ -25,12 +26,14 @@ const getKeyByValue = (object, value) => {
   return Object.keys(object).find((key) => object[key] === value);
 };
 function transformAllStationsResponse(response) {
+  return response;
   let newResp = {};
   response.stations.map((value) => {
     let station = new Object();
     station.name = value.name;
     station.uid = value.id;
     station.id = value.station_id;
+    station.lines = value.lines_for_station;
     station.coords = [value.coordinates.latitude, value.coordinates.longitude];
     newResp[station.uid] = station;
   });
