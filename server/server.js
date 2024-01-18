@@ -32,8 +32,9 @@ function transformAllStationsResponse(response) {
     station.name = value.name;
     station.uid = value.id;
     station.id = value.station_id;
-    value.lines_for_station,map((value1)=>{
-      station.lines_for_station = value1;
+    value.lines_for_station = new Array();
+    value.lines_for_station.map((value1)=>{
+      station.lines_for_station.push(value1);
     });
     station.coords = [value.coordinates.latitude, value.coordinates.longitude];
     newResp[station.uid] = station;
