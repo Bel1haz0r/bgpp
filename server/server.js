@@ -26,14 +26,15 @@ const getKeyByValue = (object, value) => {
   return Object.keys(object).find((key) => object[key] === value);
 };
 function transformAllStationsResponse(response) {
-  return response;
   let newResp = {};
   response.stations.map((value) => {
     let station = new Object();
     station.name = value.name;
     station.uid = value.id;
     station.id = value.station_id;
-    station.lines = value.lines_for_station;
+    value.lines_for_station,map((value1)=>{
+      station.lines_for_station = value1;
+    });
     station.coords = [value.coordinates.latitude, value.coordinates.longitude];
     newResp[station.uid] = station;
   });
@@ -41,6 +42,7 @@ function transformAllStationsResponse(response) {
 }
 
 function transformStationResponse(response, city) {
+  return response;
   let newResp = new Object();
   newResp.city = city;
   newResp.name = response[0].station_name;
