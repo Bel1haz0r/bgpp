@@ -64,8 +64,8 @@ function transformStationResponse(response, city) {
     vehicle.garageNo = value.vehicles[0].garageNo;
     vehicle.coords = [value.vehicles[0].lat, value.vehicles[0].lng];
     let length = value.all_stations.length;
-    vehicle.lastStationId = value.all_stations[length-1][id];
-    vehicle.lastStationName = allStations[city][value.all_stations[length-1][id]].name;
+    vehicle.lastStationId = value.all_stations[length-1].id;
+    vehicle.lastStationName = allStations[city][value.all_stations[length-1].id].name;
     newResp.vehicles.push(vehicle);
   });
 
