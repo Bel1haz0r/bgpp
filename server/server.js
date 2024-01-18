@@ -43,7 +43,6 @@ function transformAllStationsResponse(response) {
 }
 
 function transformStationResponse(response, city) {
-  return response;
   let newResp = new Object();
   newResp.city = city;
   newResp.name = response[0].station_name;
@@ -64,6 +63,8 @@ function transformStationResponse(response, city) {
     vehicle.stationName = value.vehicles[0].station_name;
     vehicle.garageNo = value.vehicles[0].garageNo;
     vehicle.coords = [value.vehicles[0].lat, value.vehicles[0].lng];
+    let length = value.all_stations.length;
+    vehicle.lastStopId = value.all_stations[length-1];
     newResp.vehicles.push(vehicle);
   });
 
