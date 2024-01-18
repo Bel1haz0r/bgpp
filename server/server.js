@@ -32,7 +32,7 @@ function transformAllStationsResponse(response) {
     station.name = value.name;
     station.uid = value.id;
     station.id = value.station_id;
-    value.lines_for_station = new Array();
+    station.lines_for_station = new Array();
     value.lines_for_station.map((value1)=>{
       station.lines_for_station.push(value1);
     });
