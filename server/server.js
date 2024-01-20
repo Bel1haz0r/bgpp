@@ -1,4 +1,3 @@
-const fs = require('node:fs');
 const fastify = require("fastify")({
   logger: true,
 });
@@ -56,6 +55,9 @@ function transformStationResponse(response, city) {
 
   response.map((value) => {
     let vehicle = new Object();
+    let length = value.all_stations.length;
+    let lastStationId =  value.all_stations[length-1].id;
+
     vehicle.lineNumber = value.line_number;
     vehicle.lineName = value.line_title;
     vehicle.secondsLeft = value.seconds_left;
@@ -63,9 +65,8 @@ function transformStationResponse(response, city) {
     vehicle.stationName = value.vehicles[0].station_name;
     vehicle.garageNo = value.vehicles[0].garageNo;
     vehicle.coords = [value.vehicles[0].lat, value.vehicles[0].lng];
-    let length = value.all_stations.length;
-    vehicle.lastStationId = value.all_stations[length-1]["id"];
-    vehicle.lastStationName = allStations[city][value.all_stations[length-1]["id"]].name;
+    vehicle.lastStationId = lastStationId
+    vehicle.lastStationName = allStations[city][lastStationId].name;
     newResp.vehicles.push(vehicle);
   });
 
@@ -86,9 +87,9 @@ async function populateMap(force = false) {
       for (const station of stations) {
         id_uid_map[city][station.id.toString()] = station.uid.toString();
       }
-      console.log(`Populating map finished for ${city}`);
+      console.info(`Populating map finished for ${city}`);
     } catch (err) {
-      console.log(`Populating map failed for ${city}`);
+      console.error(`Populating map failed for ${city}`);
       console.error(err);
     }
   }
@@ -97,6 +98,7 @@ async function populateMap(force = false) {
 async function getRequest(url, apikey) {
   const headers = {
     "X-Api-Authentication": apikey,
+    'User-Agent': 'okhttp/4.10.0'
   };
 
   const response = await axios.get(url, { headers, timeout: 5000 });
@@ -109,6 +111,7 @@ async function getRequest(url, apikey) {
 async function postRequest(url, apikey, payload) {
   const headers = {
     "X-Api-Authentication": apikey,
+    'User-Agent': 'okhttp/4.10.0'
   };
 
   const response = await axios.post(url, payload, { headers, timeout: 5000 });
@@ -226,7 +229,7 @@ fastify.get("/api/cities", async (request, reply) => {
     reply.send(err);
   }
 });
-fastify.get("/", (request, reply) => reply.sendFile("index.html"));
+fastify.get("/", (request, reply) => reply.redirect(301, "https://justphoenix.io"));
 
 (async () => {
   try {
